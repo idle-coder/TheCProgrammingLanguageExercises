@@ -1,22 +1,26 @@
 #include <stdio.h>
 
-#define MAXLINE 1000    // Maximum input line size
+#define MAXLINE     1000    // Maximum input line size
+#define TAB_WIDTH   7       // Seven blanks equals one tab
 
 int get_line(char line[], int maxline);
-void reverse(char s[]);
+void entab(char from[], char to[]);
 
-// Remove empty lines and trailing blanks and tabs
+// Entab, replace blanks with tabs and blanks.
+// I'll give preference to tabs because a tab
+// is just one character, so we save some cycles.
 
 int main()
 {
-    int len;            // Current line length
+    int len;                // Current line length
     char line[MAXLINE];     // Current input line
+    char entabed[MAXLINE];  // Entabed string
     int i;
 
     while ((len = get_line(line, MAXLINE)) > 0)
     {
-        reverse(line);
-        printf("%s\n", line);
+        entab(line, entabed);
+        printf("%s\n", entabed);
     }
 
     return 0;
@@ -40,22 +44,30 @@ int get_line(char s[], int lim)
 }
 
 
-void reverse(char s[])
+void entab(char from[], char to[])
 {
-    int i, j;
-    char tmp;
+    int i, j, blanks;
+    i = j = blanks = 0;
 
-    for (i = 0; s[i] != '\0'; i++)
-        ;
-    i--;
-
-    if (s[i] == '\n')
-        i--;
-
-    for (j = 0; j < i; j++, i--)
+    for (j = 0; from[j] != '\0'; j++)
     {
-        tmp = s[j];
-        s[j] = s[i];
-        s[i] = tmp;
+        if (from[j] != ' ')
+            to[i++] = from[j];
+        else
+        {
+            if (++blanks == TAB_WIDTH)
+            {
+                to[i++] = '\t';
+                blanks = 0;
+            }
+            else if (from[j + 1] != ' ')
+            {
+                blanks += i;
+                while (i < blanks)
+                    to[i++] = ' ';
+                blanks = 0;
+            }
+        }
     }
+    to[i] = '\0';
 }
