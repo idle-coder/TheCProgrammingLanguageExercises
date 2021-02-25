@@ -9,6 +9,8 @@
 
 int main ()
 {
+    printf(
+        "This code works for words with maximum length of 10 characters.\n");
     int c, i, state;
     int word_len[10];
 

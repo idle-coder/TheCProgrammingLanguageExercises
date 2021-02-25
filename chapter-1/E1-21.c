@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #define MAXLINE     1000    // Maximum input line size
-#define TAB_WIDTH   7       // Seven blanks equals one tab
+#define TAB_WIDTH   8       // Eight blanks equals one tab
 
 int get_line(char line[], int maxline);
 void entab(char from[], char to[]);

@@ -15,3 +15,8 @@
     If we can, input special characters that are neither
     letters or symbols.
 */
+
+int main()
+{
+	
+}

@@ -5,6 +5,6 @@
 int main ()
 {
     int c = EOF;
-    printf("%d = EOF\n", c);
+    printf("EOF = %d\n", c);
 }
 

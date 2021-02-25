@@ -8,5 +8,5 @@ int main ()
 
     while (c = getchar() != EOF)
         printf("%d\n", c);
-    printf("%d = EOF\n", c);
+    printf("EOF = %d\n", c);
 }
