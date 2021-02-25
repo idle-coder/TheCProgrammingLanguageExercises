@@ -7,8 +7,7 @@ int get_line(char line[], int maxline);
 void entab(char from[], char to[]);
 
 // Entab, replace blanks with tabs and blanks.
-// I'll give preference to tabs because a tab
-// is just one character, so we save some cycles.
+// I'll give preference to spaces when possible.
 
 int main()
 {
