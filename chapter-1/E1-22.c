@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAXLINE     1000    // Maximum input line size
+#define MAXLINE     1001    // Maximum input line size
 #define LINE_WIDTH   100    // Maximum columns in a line
 
 #define FAILURE         0
