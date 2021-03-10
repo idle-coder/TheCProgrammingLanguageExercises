@@ -1,23 +1,10 @@
 /*
- *  Case 1. The line has no spaces; Add a dash in the last possible char of the
- *  line , then a newline and then the following characters on the line.
  *
- *  Case 2. There is a space at most ten characters away from the line limit; 
- *  Replace space with newline.
- *
- *  Case 3. There is a space eleven or more positions away from the line limit.
- *  Add newline at the line limit and continue working with the rest of the
- *  string.
- *
- *  Ideas: Is there a function to split string in two? With that we can print
- *  the first part and keep working with the other one.
- *
- *  Change the pointer to your current position.
- *  Print part of a string with fwrite(str, 1, len, stdout)
  */
 
 #include <stdio.h>
 #include <string.h>
+#include <limits.h>
 
 #define MAXLINE     1001    // Maximum input line size
 #define LINE_WIDTH   101    // Maximum columns in a line
@@ -25,7 +12,16 @@
 int get_line(char line[], int maxline);
 int fold(char *from, char to []);
 
-// Break long lines in shorter lines
+// This code breaks long lines in shorter lines.
+//
+// It replaces the closest blank with a newline if it is positioned at most ten
+// columns away from the line width.
+//
+// If there is no blank close enough or the whole line has no blanks, then a 
+// dash is added on the last possible character on the line and a newline after
+// it.
+//
+// If the input is longer than MAXLINE, the rest is discarded.
 
 int main()
 {
@@ -37,8 +33,10 @@ int main()
 
     while ((len = get_line(line, MAXLINE)) > 0)
     {
-        fold(line, foldedLine);
-        printf("%s", foldedLine);
+        if(!fold(line_ptr, foldedLine))
+            printf("%s", foldedLine);
+        line[0] = '\0';
+        line_ptr = line;
     }
 
     return 0;
@@ -58,6 +56,9 @@ int get_line(char s[], int lim)
     }
     s[i] = '\0';
 
+    if (i >= lim - 1)
+        while ((c = getchar()) != '\n' && c != EOF)
+            ;
     return i;
 }
 
@@ -66,11 +67,11 @@ int fold(char *from, char to [])
 {
     to[0] = '\0';
     int space_pos = 0;
-    int to_index = 0, from_index = 0, i = 0;
+    int to_index = 0, i = 0;
     while (strlen(from) > LINE_WIDTH)
     {
         for (i = LINE_WIDTH - 1; i >= LINE_WIDTH - 11; i--)
-            if(from[i] == ' ')
+            if (from[i] == ' ')
             {
                 space_pos = i;
                 break;
@@ -78,22 +79,33 @@ int fold(char *from, char to [])
 
         if (space_pos)
         {
-            for(i = 0; i < space_pos; i++)
+            for (i = 0; i < space_pos; i++)
                 to[to_index++] = *from++;
+
             from++;
             to[to_index++] = '\n';
-        }    
+        }
+        else 
+        {
+            for(i = 0; i < LINE_WIDTH - 2; i++)
+                to[to_index++] = *from++;
+
+            to[to_index++] = '-';
+            to[to_index++] = '\n';
+        }
+        space_pos = 0;
     } 
-    if (!strlen(to))
+    if (to_index == 0)
     {
         printf("The line is too short to be folded.\n");
         return 1;
     }
-    else {
+    else 
+    {
         for(; *from != '\0'; from++)
             to[to_index++] = *from;
         to[to_index] = '\0';
-        return 1;
+        return 0;
     }
 }
 /*
