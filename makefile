@@ -14,7 +14,7 @@ $(TARGS): %: $(SRCS)/%.c
 	$(CC) $(CFLAGS) -o $(BINS)/$@ $<
 
 clean:
-	$(RM) -r $(BINS)/*
+	$(RM) -r $(CURDIR)/$(BINS)/*
 
 print-%:
 	@echo '$*=$($*)'
